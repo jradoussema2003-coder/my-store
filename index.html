@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE Store | Premium Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .cart-animate { transform: scale(1.2); transition: 0.2s; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tighter">LUXE.</h1>
+            <div class="flex items-center gap-6">
+                <a href="#products" class="hover:text-gray-500 transition">Shop</a>
+                <a href="#contact" class="hover:text-gray-500 transition">Contact</a>
+                <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition">
+                    🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white py-20 border-b">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-light mb-4">Elevate Your Everyday.</h2>
+            <p class="text-gray-500 text-lg mb-8">Curated premium goods delivered to your door.</p>
+            <a href="#products" class="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition">Browse Products</a>
+        </div>
+    </header>
+
+    <main id="products" class="max-w-6xl mx-auto px-6 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="product-list">
+            </div>
+    </main>
+
+    <section id="contact" class="bg-gray-100 py-20">
+        <div class="max-w-xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-light">Contact Us</h3>
+                <p class="text-gray-500 mt-2">Questions about your order? Email us.</p>
+            </div>
+            <form action="https://formspree.io/f/jradoussema2003@gmail.com" method="POST" class="space-y-4">
+                <input type="text" name="name" placeholder="Full Name" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none">
+                <input type="email" name="email" placeholder="Email Address" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none">
+                <textarea name="message" rows="4" placeholder="How can we help?" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none"></textarea>
+                <button type="submit" class="w-full bg-black text-white py-4 rounded-xl font-bold hover:shadow-lg transition">Send Email</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-2xl font-bold">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-3xl">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto space-y-4">
+            <p class="text-gray-400">Loading cart...</p>
+        </div>
+        <div class="border-t pt-6 mt-6">
+            <div class="flex justify-between text-xl font-bold mb-6">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-black text-white py-5 rounded-2xl font-bold hover:bg-gray-800 transition active:scale-95 shadow-xl">
+                Place Order & Save to DB
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOVbPDaOQ1pail9IFjJmxawda_W_EnZ6g",
+            authDomain: "mystore-9e855.firebaseapp.com",
+            projectId: "mystore-9e855",
+            storageBucket: "mystore-9e855.firebasestorage.app",
+            messagingSenderId: "391565693285",
+            appId: "1:391565693285:web:96857ff67d92ab5fa6d18c",
+            measurementId: "G-1VT1T02R4X"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const products = [
+            { id: 1, name: "Minimalist Watch", price: 199.00, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
+            { id: 2, name: "Classic Headphones", price: 249.00, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
+            { id: 3, name: "Leather Backpack", price: 120.00, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" }
+        ];
+
+        let cart = [];
+
+        window.renderProducts = function() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = products.map(p => `
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl mb-4 bg-gray-200 aspect-square">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <button onclick="addToCart(${p.id})" class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur py-3 rounded-xl font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                            Add to Cart
+                        </button>
+                    </div>
+                    <h3 class="font-semibold text-lg">${p.name}</h3>
+                    <p class="text-gray-500 font-light">$${p.price.toFixed(2)}</p>
+                </div>
+            `).join('');
+        }
+
+        window.addToCart = function(id) {
+            const p = products.find(item => item.id === id);
+            cart.push(p);
+            updateUI();
+            const dot = document.getElementById('cart-count');
+            dot.classList.add('cart-animate');
+            setTimeout(() => dot.classList.remove('cart-animate'), 200);
+        }
+
+        window.updateUI = function() {
+            const container = document.getElementById('cart-items');
+            document.getElementById('cart-count').innerText = cart.length;
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center mt-10">Your cart is empty.</p>';
+                document.getElementById('cart-total').innerText = '$0.00';
+                return;
+            }
+
+            container.innerHTML = cart.map((item, i) => `
+                <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+                    <div><p class="font-bold text-sm">${item.name}</p><p class="text-xs text-gray-400">$${item.price}</p></div>
+                    <button onclick="cart.splice(${i},1);updateUI();" class="text-red-400 text-xs">Remove</button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        window.toggleCart = function() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        }
+
+        window.checkout = async function() {
+            if(cart.length === 0) return alert("Cart is empty!");
+            
+            try {
+                const docRef = await addDoc(collection(db, "orders"), {
+                    items: cart,
+                    total: cart.reduce((s, i) => s + i.price, 0),
+                    timestamp: new Date()
+                });
+                alert("Success! Order saved in Firebase (ID: " + docRef.id + ")");
+                cart = [];
+                updateUI();
+                toggleCart();
+            } catch (e) {
+                alert("Database Error: " + e.message);
+            }
+        }
+
+        renderProducts();
+        updateUI();
+    </script>
+</body>
+</html>
