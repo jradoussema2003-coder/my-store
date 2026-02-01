@@ -1,174 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXE Store | Premium Collection</title>
+    <title>Paul & Shark Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .cart-animate { transform: scale(1.2); transition: 0.2s; }
-    </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 font-sans">
 
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-tighter">LUXE.</h1>
-            <div class="flex items-center gap-6">
-                <a href="#products" class="hover:text-gray-500 transition">Shop</a>
-                <a href="#contact" class="hover:text-gray-500 transition">Contact</a>
-                <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition">
-                    🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <header class="bg-white py-20 border-b">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-light mb-4">Elevate Your Everyday.</h2>
-            <p class="text-gray-500 text-lg mb-8">Curated premium goods delivered to your door.</p>
-            <a href="#products" class="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition">Browse Products</a>
+    <header class="sticky top-0 bg-white shadow-sm z-50 p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black tracking-tighter text-blue-900">PAUL & SHARK</h1>
+            <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-full">
+                🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+            </button>
         </div>
     </header>
 
-    <main id="products" class="max-w-6xl mx-auto px-6 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="product-list">
+    <main class="max-w-6xl mx-auto p-6">
+        <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
             </div>
     </main>
 
-    <section id="contact" class="bg-gray-100 py-20">
-        <div class="max-w-xl mx-auto px-6">
-            <div class="text-center mb-10">
-                <h3 class="text-3xl font-light">Contact Us</h3>
-                <p class="text-gray-500 mt-2">Questions about your order? Email us.</p>
-            </div>
-            <form action="https://formspree.io/f/jradoussema2003@gmail.com" method="POST" class="space-y-4">
-                <input type="text" name="name" placeholder="Full Name" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none">
-                <input type="email" name="email" placeholder="Email Address" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none">
-                <textarea name="message" rows="4" placeholder="How can we help?" required class="w-full p-4 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-black outline-none"></textarea>
-                <button type="submit" class="w-full bg-black text-white py-4 rounded-xl font-bold hover:shadow-lg transition">Send Email</button>
-            </form>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h2 class="text-xl font-bold">Votre Panier</h2>
+            <button onclick="toggleCart()" class="text-2xl">&times;</button>
         </div>
-    </section>
-
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] p-8 flex flex-col">
-        <div class="flex justify-between items-center mb-8">
-            <h3 class="text-2xl font-bold">Your Cart</h3>
-            <button onclick="toggleCart()" class="text-3xl">&times;</button>
-        </div>
-        <div id="cart-items" class="flex-grow overflow-y-auto space-y-4">
-            <p class="text-gray-400">Loading cart...</p>
-        </div>
-        <div class="border-t pt-6 mt-6">
-            <div class="flex justify-between text-xl font-bold mb-6">
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6"></div>
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between mb-4 font-bold text-xl">
                 <span>Total:</span>
-                <span id="cart-total">$0.00</span>
+                <span id="cart-total">0 DT</span>
             </div>
-            <button onclick="checkout()" class="w-full bg-black text-white py-5 rounded-2xl font-bold hover:bg-gray-800 transition active:scale-95 shadow-xl">
-                Place Order & Save to DB
+            <button onclick="checkout()" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition">
+                Commander via WhatsApp
             </button>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+    <script>
+        // 1. Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDOVbPDaOQ1pail9IFjJmxawda_W_EnZ6g",
             authDomain: "mystore-9e855.firebaseapp.com",
             projectId: "mystore-9e855",
             storageBucket: "mystore-9e855.firebasestorage.app",
             messagingSenderId: "391565693285",
-            appId: "1:391565693285:web:96857ff67d92ab5fa6d18c",
-            measurementId: "G-1VT1T02R4X"
+            appId: "1:391565693285:web:96857ff67d92ab5fa6d18c"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
+        // 2. Products List
         const products = [
-            { id: 1, name: "Minimalist Watch", price: 199.00, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
-            { id: 2, name: "Classic Headphones", price: 249.00, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-            { id: 3, name: "Leather Backpack", price: 900.00, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
-            { id: 4, name: "shorts", price: 900.00 , img: "094017.img" },
+            { id: 1, name: "Set Gris & Noir", price: 55, img: "grey-set.jpg" },
+            { id: 2, name: "Set Full Black V1", price: 55, img: "black-set-1.jpg" },
+            { id: 3, name: "Set Full Black V2", price: 55, img: "black-set-2.jpg" }
         ];
 
         let cart = [];
 
-        window.renderProducts = function() {
+        // 3. Render Products
+        function renderProducts() {
             const list = document.getElementById('product-list');
             list.innerHTML = products.map(p => `
-                <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-2xl mb-4 bg-gray-200 aspect-square">
-                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        <button onclick="addToCart(${p.id})" class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur py-3 rounded-xl font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                            Add to Cart
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 p-4 text-center">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x400?text=Photo+Manquante'" class="w-full h-80 object-contain mb-4">
+                    <h3 class="font-bold text-lg">${p.name}</h3>
+                    <p class="text-blue-900 font-black text-xl mb-4">${p.price} DT</p>
+                    <div class="flex flex-col gap-2">
+                        <select id="size-${p.id}" class="p-2 border rounded-lg bg-gray-50">
+                            <option>M</option><option>L</option><option>XL</option>
+                        </select>
+                        <button onclick="addToCart(${p.id})" class="bg-black text-white py-3 rounded-lg font-bold hover:bg-gray-800">
+                            Ajouter au Panier
                         </button>
                     </div>
-                    <h3 class="font-semibold text-lg">${p.name}</h3>
-                    <p class="text-gray-500 font-light">$${p.price.toFixed(2)}</p>
                 </div>
             `).join('');
         }
 
-        window.addToCart = function(id) {
-            const p = products.find(item => item.id === id);
-            cart.push(p);
+        // 4. Cart Functions
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            const size = document.getElementById(`size-${id}`).value;
+            cart.push({ ...p, selectedSize: size });
             updateUI();
-            const dot = document.getElementById('cart-count');
-            dot.classList.add('cart-animate');
-            setTimeout(() => dot.classList.remove('cart-animate'), 200);
+            alert("Ajouté !");
         }
 
-        window.updateUI = function() {
-            const container = document.getElementById('cart-items');
+        function updateUI() {
             document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cart-items');
             
             if (cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center mt-10">Your cart is empty.</p>';
-                document.getElementById('cart-total').innerText = '$0.00';
+                container.innerHTML = '<p class="text-center text-gray-400">Vide</p>';
+                document.getElementById('cart-total').innerText = "0 DT";
                 return;
             }
 
-            container.innerHTML = cart.map((item, i) => `
-                <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
-                    <div><p class="font-bold text-sm">${item.name}</p><p class="text-xs text-gray-400">$${item.price}</p></div>
-                    <button onclick="cart.splice(${i},1);updateUI();" class="text-red-400 text-xs">Remove</button>
+            container.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between items-center mb-4 bg-gray-50 p-3 rounded-lg">
+                    <div class="text-left">
+                        <p class="font-bold text-sm">${item.name}</p>
+                        <p class="text-xs text-blue-800">Taille: ${item.selectedSize}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-red-500 font-bold">🗑️</button>
                 </div>
             `).join('');
 
-            const total = cart.reduce((s, i) => s + i.price, 0);
-            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('cart-total').innerText = total + " DT";
         }
 
-        window.toggleCart = function() {
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateUI();
+        }
+
+        function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
         }
 
-        window.checkout = async function() {
-            if(cart.length === 0) return alert("Cart is empty!");
+        // 5. Checkout via WhatsApp
+        async function checkout() {
+            if (cart.length === 0) return alert("Panier vide");
             
+            const phone = prompt("Votre Numéro de Téléphone:");
+            const addr = prompt("Votre Adresse:");
+            
+            if (!phone || !addr) return alert("Infos obligatoires");
+
             try {
-                const docRef = await addDoc(collection(db, "orders"), {
+                // Save to Firebase
+                await db.collection("orders").add({
                     items: cart,
-                    total: cart.reduce((s, i) => s + i.price, 0),
-                    timestamp: new Date()
+                    phone: phone,
+                    address: addr,
+                    date: new Date()
                 });
-                alert("Success! Order saved in Firebase (ID: " + docRef.id + ")");
+
+                // Open WhatsApp
+                let msg = `Nouvelle commande Paul & Shark:\n`;
+                cart.forEach(i => msg += `- ${i.name} (Taille ${i.selectedSize})\n`);
+                msg += `\nTotal: ${document.getElementById('cart-total').innerText}\nAdresse: ${addr}\nTel: ${phone}`;
+                
+                window.open(`https://wa.me/21625497208?text=${encodeURIComponent(msg)}`); // <--- Put your real number
+                
                 cart = [];
                 updateUI();
                 toggleCart();
             } catch (e) {
-                alert("Database Error: " + e.message);
+                alert("Erreur: " + e.message);
             }
         }
 
         renderProducts();
-        updateUI();
     </script>
 </body>
 </html>
