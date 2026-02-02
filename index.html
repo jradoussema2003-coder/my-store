@@ -3,47 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paul & Shark Store</title>
+    <title>Fashion Store | Premium Collection</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 text-gray-900">
 
-    <header class="sticky top-0 bg-white shadow-sm z-50 p-4">
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-[100] transform transition-all duration-500 translate-y-[-150%] opacity-0">
+        <div class="bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-gray-700">
+            <span class="bg-green-500 rounded-full p-1"><i class="fa-solid fa-check text-xs"></i></span>
+            <span class="font-bold text-sm">Produit ajouté au panier !</span>
+        </div>
+    </div>
+
+    <div class="bg-black text-white text-[10px] py-2 text-center font-bold uppercase tracking-[0.2em]">
+        🚀 Livraison Gratuite sur toute la Tunisie
+    </div>
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-md shadow-sm z-50 px-4 py-3">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-black tracking-tighter text-blue-900">PAUL & SHARK</h1>
-            <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-full">
-                🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+            <div class="flex flex-col">
+                <h1 class="text-2xl md:text-3xl font-black tracking-tighter text-gray-900 leading-none uppercase">FASHION<span class="text-blue-600">.</span>STORE</h1>
+                <span class="text-[9px] font-bold text-gray-400 tracking-widest uppercase ml-1">Premium Collection</span>
+            </div>
+            <button onclick="toggleCart()" class="group relative p-3 bg-black rounded-2xl transition-all hover:bg-gray-800 active:scale-90 shadow-lg">
+                <i class="fa-solid fa-bag-shopping text-white text-lg"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
             </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-6">
-        <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            </div>
+    <main class="max-w-6xl mx-auto p-6 min-h-screen">
+        <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
     </main>
+
+    <footer class="bg-gray-900 text-white mt-20 pt-12 pb-8 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h3 class="text-xl font-black mb-4 uppercase">FASHION STORE</h3>
+                <p class="text-gray-400 text-sm">Qualité premium et style unique. Livraison rapide dans toutes les régions de Tunisie.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-sm">Service</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="https://wa.me/21625497208" class="text-green-400 font-bold hover:underline">WhatsApp: +216 25 497 208</a></li>
+                    <li>Paiement à la livraison</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-sm">Suivez-nous</h4>
+                <div class="flex gap-4">
+                    <a href="instagram://user?username=YOUR_INSTA" onclick="window.open('https://instagram.com/YOUR_INSTA'); return false;" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-tr hover:from-yellow-400 hover:to-purple-600 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="fb://facewebmodal/f?href=https://www.facebook.com/YOUR_FB_ID" onclick="window.open('https://www.facebook.com/YOUR_FB_PAGE'); return false;" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
         <div class="p-6 border-b flex justify-between items-center">
-            <h2 class="text-xl font-bold">Votre Panier</h2>
-            <button onclick="toggleCart()" class="text-2xl">&times;</button>
+            <h2 class="text-xl font-bold uppercase tracking-tight">Votre Panier</h2>
+            <button onclick="toggleCart()" class="text-3xl text-gray-400 hover:text-black">&times;</button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto p-6"></div>
         <div class="p-6 border-t bg-gray-50">
-            <div class="flex justify-between mb-4 font-bold text-xl">
+            <div class="flex justify-between mb-4 font-black text-2xl">
                 <span>Total:</span>
                 <span id="cart-total">0 DT</span>
             </div>
-            <button onclick="checkout()" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition">
-                Commander via WhatsApp
+            <button onclick="checkout()" class="w-full bg-black text-white py-5 rounded-2xl font-bold text-lg hover:bg-gray-800 transition shadow-xl uppercase tracking-widest">
+                Commander
             </button>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <h3 class="text-2xl font-black text-center mb-6 uppercase">Livraison</h3>
+            <div class="space-y-4">
+                <input type="tel" id="cust-phone" placeholder="Numéro de Téléphone" class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-black outline-none transition">
+                <textarea id="cust-addr" placeholder="Adresse complète" rows="2" class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-black outline-none transition"></textarea>
+                <button id="confirm-btn" onclick="confirmOrder()" class="w-full bg-black text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3">
+                    <svg id="btn-spinner" class="animate-spin h-5 w-5 hidden" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span id="btn-text">Confirmer sur WhatsApp</span>
+                </button>
+                <button onclick="closeCheckout()" class="w-full text-gray-400 font-bold py-2">Continuer mes achats</button>
+            </div>
         </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
     <script>
-        // 1. Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDOVbPDaOQ1pail9IFjJmxawda_W_EnZ6g",
             authDomain: "mystore-9e855.firebaseapp.com",
@@ -52,11 +107,9 @@
             messagingSenderId: "391565693285",
             appId: "1:391565693285:web:96857ff67d92ab5fa6d18c"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. Products List
         const products = [
             { id: 1, name: "Set Gris & Noir", price: 55, img: "grey-set.jpg" },
             { id: 2, name: "Set Full Black V1", price: 55, img: "black-set-1.jpg" },
@@ -65,98 +118,90 @@
 
         let cart = [];
 
-        // 3. Render Products
         function renderProducts() {
-            const list = document.getElementById('product-list');
-            list.innerHTML = products.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 p-4 text-center">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/300x400?text=Photo+Manquante'" class="w-full h-80 object-contain mb-4">
-                    <h3 class="font-bold text-lg">${p.name}</h3>
-                    <p class="text-blue-900 font-black text-xl mb-4">${p.price} DT</p>
+            document.getElementById('product-list').innerHTML = products.map(p => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 p-4 transition-transform hover:scale-[1.02]">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/400x500?text=Product+Image'" class="w-full h-80 object-contain mb-4 rounded-2xl">
+                    <h3 class="font-bold text-lg text-center">${p.name}</h3>
+                    <p class="text-blue-600 font-black text-xl text-center mb-4">${p.price} DT</p>
                     <div class="flex flex-col gap-2">
-                        <select id="size-${p.id}" class="p-2 border rounded-lg bg-gray-50">
-                            <option>M</option><option>L</option><option>XL</option>
-                        </select>
-                        <button onclick="addToCart(${p.id})" class="bg-black text-white py-3 rounded-lg font-bold hover:bg-gray-800">
-                            Ajouter au Panier
-                        </button>
+                        <select id="size-${p.id}" class="p-3 bg-gray-50 rounded-xl outline-none font-bold text-sm"><option>M</option><option>L</option><option>XL</option></select>
+                        <button onclick="addToCart(${p.id})" class="bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all">Ajouter au Panier</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 4. Cart Functions
-        function addToCart(id) {
-            const p = products.find(x => x.id === id);
-            const size = document.getElementById(`size-${id}`).value;
-            cart.push({ ...p, selectedSize: size });
-            updateUI();
-            alert("Ajouté !");
-        }
+       // 1. Add this variable at the very top of your <script>, before the functions
+let toastTimeout; 
 
+function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const size = document.getElementById(`size-${id}`).value;
+    
+    cart.push({ ...p, selectedSize: size });
+    updateUI();
+
+    const toast = document.getElementById('toast');
+
+    // RESET: Clear any existing timer so they don't fight each other
+    clearTimeout(toastTimeout);
+
+    // SHOW: Remove hidden classes and add visible ones
+    toast.classList.remove('translate-y-[-150%]', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    // HIDE: After 2 seconds, move it back up
+    toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-[-150%]', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 2000);
+}
         function updateUI() {
             document.getElementById('cart-count').innerText = cart.length;
             const container = document.getElementById('cart-items');
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-400">Vide</p>';
-                document.getElementById('cart-total').innerText = "0 DT";
-                return;
-            }
-
-            container.innerHTML = cart.map((item, index) => `
-                <div class="flex justify-between items-center mb-4 bg-gray-50 p-3 rounded-lg">
-                    <div class="text-left">
-                        <p class="font-bold text-sm">${item.name}</p>
-                        <p class="text-xs text-blue-800">Taille: ${item.selectedSize}</p>
-                    </div>
-                    <button onclick="removeFromCart(${index})" class="text-red-500 font-bold">🗑️</button>
-                </div>
-            `).join('');
-
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('cart-total').innerText = total + " DT";
+            container.innerHTML = cart.length === 0 ? '<p class="text-center text-gray-400 mt-10 italic">Votre panier est vide</p>' : 
+                cart.map((item, i) => `
+                <div class="flex justify-between items-center mb-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div><p class="font-bold text-sm">${item.name}</p><p class="text-xs text-blue-600 font-bold">Taille: ${item.selectedSize}</p></div>
+                    <button onclick="removeFromCart(${i})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash-can"></i></button>
+                </div>`).join('');
+            document.getElementById('cart-total').innerText = cart.reduce((s, i) => s + i.price, 0) + " DT";
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateUI();
-        }
+        function removeFromCart(i) {
+    cart.splice(i, 1);
+    updateUI(); // This refreshes the list and total, but leaves the toast alone
+    }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
+        function checkout() { if (cart.length > 0) { 
+            document.getElementById('cust-phone').value = localStorage.getItem('f_phone') || '';
+            document.getElementById('cust-addr').value = localStorage.getItem('f_addr') || '';
+            document.getElementById('checkout-modal').classList.remove('hidden'); 
+        }}
+        function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
-        }
+        async function confirmOrder() {
+            const phone = document.getElementById('cust-phone').value;
+            const addr = document.getElementById('cust-addr').value;
+            if (phone.length < 8 || addr.length < 5) return alert("Détails invalides");
 
-        // 5. Checkout via WhatsApp
-        async function checkout() {
-            if (cart.length === 0) return alert("Panier vide");
+            const btn = document.getElementById('confirm-btn');
+            btn.disabled = true; document.getElementById('btn-spinner').classList.remove('hidden');
+
+            localStorage.setItem('f_phone', phone); localStorage.setItem('f_addr', addr);
+
+            let msg = `*NOUVELLE COMMANDE*\n\n`;
+            cart.forEach(i => msg += `• ${i.name} (Taille: ${i.selectedSize})\n`);
+            msg += `\n*Total:* ${document.getElementById('cart-total').innerText}\n*Client:* ${phone}\n*Adresse:* ${addr}`;
             
-            const phone = prompt("Votre Numéro de Téléphone:");
-            const addr = prompt("Votre Adresse:");
-            
-            if (!phone || !addr) return alert("Infos obligatoires");
+            window.open(`https://wa.me/21625497208?text=${encodeURIComponent(msg)}`, '_blank');
 
             try {
-                // Save to Firebase
-                await db.collection("orders").add({
-                    items: cart,
-                    phone: phone,
-                    address: addr,
-                    date: new Date()
-                });
-
-                // Open WhatsApp
-                let msg = `Nouvelle commande Paul & Shark:\n`;
-                cart.forEach(i => msg += `- ${i.name} (Taille ${i.selectedSize})\n`);
-                msg += `\nTotal: ${document.getElementById('cart-total').innerText}\nAdresse: ${addr}\nTel: ${phone}`;
-                
-                window.open(`https://wa.me/21625497208?text=${encodeURIComponent(msg)}`); // <--- Put your real number
-                
-                cart = [];
-                updateUI();
-                toggleCart();
-            } catch (e) {
-                alert("Erreur: " + e.message);
+                await db.collection("orders").add({ items: cart, phone, address: addr, date: new Date() });
+                cart = []; updateUI(); closeCheckout(); toggleCart();
+            } finally {
+                btn.disabled = false; document.getElementById('btn-spinner').classList.add('hidden');
             }
         }
 
